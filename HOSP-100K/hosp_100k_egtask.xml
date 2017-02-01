@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE doc [
+<!ENTITY SIZE "100k">
+]>
+<task>
+  <!-- ****************************************************
+                      DATABASES
+    **************************************************** -->
+  <target>
+    <type>DBMS</type>
+    <access-configuration>
+      <driver>org.postgresql.Driver</driver>
+      <uri>jdbc:postgresql:hosp_&SIZE;</uri>
+      <schema>target</schema>
+      <login>pguser</login>
+      <password>pguser</password>
+    </access-configuration>
+    <import>
+      <input type="csv" separator="," table="hosp">hospital_&SIZE;.csv</input>
+    </import>
+  </target>
+  <!-- ****************************************************
+                    DEPENDENCIES
+    **************************************************** -->
+  <dependencies><![CDATA[
+DCs:
+// ¬(Hosp(City, Zip), Hosp(City’, Zip’), City != City’, Zip = Zip’
+e1: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$z1 == $z2, $c1 != $c2 -> #fail.
+
+// dc2 : ¬(Hosp(Stat, Zip), Hosp(Stat’, Zip’), Stat != Stat’, Zip = Zip’)
+e2: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$z1 == $z2, $s1 != $s2 -> #fail.
+
+// dc3 : ¬(Hosp(Zip,Address, Ph), Hosp(Zip’,Address’, Ph’), Zip != Zip’, Address != Address’, Ph = Ph’)
+e3: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$z1 == $z2, $a1 == $a2,  $ph1 != $ph2 -> #fail.
+
+// dc4 : ¬(Hosp(City,Address, Ph), Hosp(City’,Address’, Ph’), City != City’,Address != Address’, Ph = Ph’)
+e4: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$c1 == $c2,  $a1 == $a2, $ph1 != $ph2 -> #fail.
+
+// dc5 : ¬(Hosp(Stat,Address, Ph), Hosp(Stat’,Address’ Ph’), Stat != Stat’, Address != Address’, Ph = Ph’)
+e5: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$s1 == $s2,  $a1 == $a2, $ph1 != $ph2 -> #fail.
+
+// dc6 : ¬(Hosp(PrNo, MC, StAv), Hosp(PrNo’, MC’, StAv’), PrNo = PrNo’, MC = MC’, StAv != StAv’)
+e6: 
+hosp(PrNo: $p1, HospitalName: $n1 ,Address:$a1 ,City:$c1 ,State:$s1 ,Zip: $z1, CountryName: $cn1  ,Phone: $ph1 ,HospitalType: $ht1 ,HospitalOwner:$ho1 ,EmergencyService: $es1, Condition:$d1 ,MC: $mc1 ,MeasureName :$mn1,Score :$sc1,Sample: $sa1 ,StateAvg: $av1), 
+hosp(PrNo: $p2, HospitalName: $n2 ,Address:$a2 ,City:$c2 ,State:$s2 ,Zip: $z2, CountryName: $cn2  ,Phone: $ph2 ,HospitalType: $ht2 ,HospitalOwner:$ho2 ,EmergencyService: $es2, Condition:$d2 ,MC: $mc2 ,MeasureName :$mn2,Score :$sc2,Sample: $sa2 ,StateAvg: $av2), 
+$p1 == $p2,  $mc1 == $mc2, $av1 != $av2 -> #fail.
+
+
+
+]]></dependencies>
+  <!-- ****************************************************
+                      CONFIGURATION
+    **************************************************** -->
+  <configuration>
+    <!-- To print extra information in the ouput (default = false) -->
+    <printLog>true</printLog>
+    <!-- To load DB every time on start (default = false)  -->
+    <recreateDBOnStart>true</recreateDBOnStart>
+    <!-- To apply the changes (default = false) -->
+    <applyCellChanges>true</applyCellChanges>
+    <!-- To  apply cell changes on a copy of the original target, with a custom suffix (default = true) -->
+    <cloneTargetSchema>true</cloneTargetSchema>
+    <cloneSuffix>_dirty</cloneSuffix>
+    <!-- To export the dirty db -->
+    <exportDirtyDB>true</exportDirtyDB>
+    <exportDirtyDBPath>dirty/</exportDirtyDBPath>
+    <exportDirtyDBType>CSV</exportDirtyDBType>
+    <!-- To compute an estimate of the reparability (default = true) -->
+    <estimateRepairability>true</estimateRepairability>
+    <!-- To generate all possible changes (default = false - slow, only for toy examples)-->
+    <generateAllChanges>false</generateAllChanges>
+    <!-- To avoid interactions among changes. (default = true) -->
+    <avoidInteractions>true</avoidInteractions>
+    <!-- To check, at the end of the process, if changes are detectable. (default = false) -->
+    <checkChanges>true</checkChanges>
+    <!-- To compute an estimate of the repairability. Requires checkChanges = true. (default = false) -->
+    <estimateRepairability>true</estimateRepairability>
+    <!-- To use an optimized strategy for updates. (default = true) -->
+    <useDeltaDBForChanges>true</useDeltaDBForChanges>
+    <!-- Error percentages for dependencies and comparisons 
+        All percentages are wrt table sizes (# tuples)-->
+    <errorPercentages>
+      <defaultPercentage>20.0</defaultPercentage>
+      <vioGenQueries>
+        <vioGenQuery id="e1">
+          <comparison>(z1 == z2)</comparison>
+          <percentage>2.0</percentage>
+        </vioGenQuery>
+        <vioGenQuery id="e1">
+          <comparison>(c1 != c2)</comparison>
+          <percentage>2.0</percentage>
+        </vioGenQuery>
+      </vioGenQueries>
+    </errorPercentages>
+    <!-- The following parameters are used to control the sampling process.
+            All the fields are optional, but they may be crucial to obtain a good random sample.
+            In order to choose the cells to modify, BART will scan the result of a viogen query
+            using the following sampling algorithm:
+            1) First, a number of tuples are skipped. This is a random number choosed btw 
+                0 and (offsetFactor * tableSize)
+            2) Then BART will scan the result and will pickup tuples 
+            with a probability p = probabilityFactor.
+            
+            BART uses three kinds of queries
+            - Symmetric queries: for symmetric viogen queries (see paper)
+            - Inequality queries: for viogen queries without equalities (i.e. inequalities only)
+            - Standard queries: for all other viogen queries
+        -->
+    <vioGenQueriesConfiguration>
+      <!-- STANDARD QUERIES -->
+      <probabilityFactorForStandardQueries>0.25</probabilityFactorForStandardQueries>
+      <offsetFactorForStandardQueries>0.05</offsetFactorForStandardQueries>
+      <!-- SYMMETRIC QUERIES -->
+      <probabilityFactorForSymmetricQueries>0.25</probabilityFactorForSymmetricQueries>
+      <offsetFactorForSymmetricQueries>0.05</offsetFactorForSymmetricQueries>
+      <!-- INEQUALITY QUERIES -->
+      <probabilityFactorForInequalityQueries>0.05</probabilityFactorForInequalityQueries>
+      <offsetFactorForInequalityQueries>0.05</offsetFactorForInequalityQueries>
+      <windowSizeFactorForInequalityQueries>1.5</windowSizeFactorForInequalityQueries>
+    </vioGenQueriesConfiguration>
+    <randomErrors>
+      <tables>
+        <table name="hosp">
+          <percentage>20</percentage>
+          <!-- Percentage is wrt attributes to dirty in the table -->
+          <!-- PrNo, HospitalName ,Address ,City ,State ,Zip (integer),CountryName  ,Phone ,HospitalType ,HospitalOwner ,EmergencyService,Condition ,MC ,MeasureName ,Score ,Sample ,StateAvg,
+ -->
+          <attributes>
+            <attribute>HospitalName</attribute>
+            <attribute>Address</attribute>
+            <attribute>City</attribute>
+            <attribute>State</attribute>
+            <attribute>CountryName</attribute>
+            <attribute>Phone</attribute>
+            <attribute>HospitalType</attribute>
+            <attribute>HospitalOwner</attribute>
+            <attribute>MC</attribute>
+            <attribute>Score</attribute>
+            <attribute>StateAvg</attribute>
+          </attributes>
+        </table>
+      </tables>
+    </randomErrors>
+    <dirtyStrategies>
+      <!--
+	strategies: 
+	TypoAppendString
+	TypoAddString
+	TypoRandom
+	TypoRemoveString
+	TypoSwitchValue
+	TypoActiveDomain -->
+      <defaultStrategy>
+        <strategy>TypoRandom</strategy>
+      </defaultStrategy>
+      <attributeStrategy>
+        <attributes>
+          <attribute table="hosp" name="City">
+            <strategy>TypoAppendString</strategy>
+          </attribute>
+          <attribute table="hosp" name="State">
+            <strategy>TypoActiveDomain</strategy>
+          </attribute>
+          <attribute table="hosp" name="Phone">
+            <strategy>TypoSwitchValue</strategy>
+          </attribute>
+          <attribute table="hosp" name="StateAvg">
+            <strategy>TypoActiveDomain</strategy>
+          </attribute>
+        </attributes>
+      </attributeStrategy>
+    </dirtyStrategies>
+    <outlierErrors>
+      <tables>
+        <table name="hosp">
+          <attributes>
+            <attribute percentage="5" detectable="true">Zip</attribute>
+          </attributes>
+        </table>
+      </tables>
+    </outlierErrors>
+  </configuration>
+</task>
+
