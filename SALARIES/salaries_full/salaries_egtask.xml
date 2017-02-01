@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task>
+  <!-- ****************************************************
+                      DATABASES
+    **************************************************** -->
+  <target>
+    <type>DBMS</type>
+    <access-configuration>
+      <driver>org.postgresql.Driver</driver>
+      <uri>jdbc:postgresql:salaries</uri>
+      <schema>target</schema>
+      <login>pguser</login>
+      <password>pguser</password>
+    </access-configuration>
+    <import>
+      <input type="csv" separator="," table="salaries">Salaries.csv</input>
+    </import>
+  </target>
+  <!-- ****************************************************
+                    DEPENDENCIES
+    **************************************************** -->
+  <dependencies><![CDATA[
+DCs:
+
+//[BasePay, Benefits, EmployeeName, JobTitle] -> TotalPay
+
+e1: 
+salaries(Id: $id1,EmployeeName: $em1, JobTitle: $j1, BasePay: $b1, OvertimePay: $o1 ,OtherPay: $p1 ,Benefits: $bf1 ,TotalPay: $t1 , TotalPayBenefits: $tp1 ,Year: $y1 ,Notes: $n1, Agency: $a1, Status: $s1), 
+salaries(Id: $id2,EmployeeName: $em2, JobTitle: $j2, BasePay: $b2, OvertimePay: $o2 ,OtherPay: $p2 ,Benefits: $bf2 ,TotalPay: $t2 , TotalPayBenefits: $tp2 ,Year: $y2 ,Notes: $n2, Agency: $a2, Status: $s2),
+$b1==$b2, $bf1==$bf2, $em1==$em2, $j1==$j2, $t1!=$t2 -> #fail.
+
+//[BasePay, Benefits, EmployeeName, OvertimePay] -> TotalPay
+e2:
+salaries(Id: $id1,EmployeeName: $em1, JobTitle: $j1, BasePay: $b1, OvertimePay: $o1 ,OtherPay: $p1 ,Benefits: $bf1 ,TotalPay: $t1 , TotalPayBenefits: $tp1 ,Year: $y1 ,Notes: $n1, Agency: $a1, Status: $s1), 
+salaries(Id: $id2,EmployeeName: $em2, JobTitle: $j2, BasePay: $b2, OvertimePay: $o2 ,OtherPay: $p2 ,Benefits: $bf2 ,TotalPay: $t2 , TotalPayBenefits: $tp2 ,Year: $y2 ,Notes: $n2, Agency: $a2, Status: $s2),
+$b1==$b2, $bf1==$bf2, $em1==$em2, $o1==$o2, $t1!=$t2 -> #fail.
+
+//[BasePay, OtherPay, OvertimePay] -> TotalPay
+e3:
+salaries(Id: $id1,EmployeeName: $em1, JobTitle: $j1, BasePay: $b1, OvertimePay: $o1 ,OtherPay: $p1 ,Benefits: $bf1 ,TotalPay: $t1 , TotalPayBenefits: $tp1 ,Year: $y1 ,Notes: $n1, Agency: $a1, Status: $s1), 
+salaries(Id: $id2,EmployeeName: $em2, JobTitle: $j2, BasePay: $b2, OvertimePay: $o2 ,OtherPay: $p2 ,Benefits: $bf2 ,TotalPay: $t2 , TotalPayBenefits: $tp2 ,Year: $y2 ,Notes: $n2, Agency: $a2, Status: $s2),
+$b1==$b2, $p1==$p2, $o1==$o2,  $t1!=$t2 -> #fail.
+
+
+]]></dependencies>
+  <!-- ****************************************************
+                      CONFIGURATION
+    **************************************************** -->
+  <configuration>
+    <!-- To print extra information in the ouput (default = false) -->
+    <printLog>true</printLog>
+    <!-- To load DB every time on start (default = false)  -->
+    <recreateDBOnStart>true</recreateDBOnStart>
+    <!-- To apply the changes (default = false) -->
+    <applyCellChanges>true</applyCellChanges>
+    <!-- To  apply cell changes on a copy of the original target, with a custom suffix (default = true) -->
+    <cloneTargetSchema>true</cloneTargetSchema>
+    <cloneSuffix>_dirty</cloneSuffix>
+    <!-- To export the dirty db -->
+    <exportDirtyDB>true</exportDirtyDB>
+    <exportDirtyDBPath>dirty/</exportDirtyDBPath>
+    <exportDirtyDBType>CSV</exportDirtyDBType>
+    <!-- To compute an estimate of the reparability (default = true) -->
+    <estimateRepairability>true</estimateRepairability>
+    <!-- To generate all possible changes (default = false - slow, only for toy examples)-->
+    <generateAllChanges>false</generateAllChanges>
+    <!-- To avoid interactions among changes. (default = true) -->
+    <avoidInteractions>true</avoidInteractions>
+    <!-- To check, at the end of the process, if changes are detectable. (default = false) -->
+    <checkChanges>true</checkChanges>
+    <!-- To compute an estimate of the repairability. Requires checkChanges = true. (default = false) -->
+    <estimateRepairability>true</estimateRepairability>
+    <!-- To use an optimized strategy for updates. (default = true) -->
+    <useDeltaDBForChanges>true</useDeltaDBForChanges>
+    <!-- Error percentages for dependencies and comparisons 
+        All percentages are wrt table sizes (# tuples) -->
+    <errorPercentages>
+      <defaultPercentage>20.0</defaultPercentage>
+      <vioGenQueries>
+        <vioGenQuery id="e1">
+          <comparison>(em1 == em2)</comparison>
+          <percentage>5.0</percentage>
+        </vioGenQuery>
+        <vioGenQuery id="e1">
+          <comparison>(t1 != t2)</comparison>
+          <percentage>5.0</percentage>
+        </vioGenQuery>
+      </vioGenQueries>
+    </errorPercentages>
+    <!-- The following parameters are used to control the sampling process.
+            All the fields are optional, but they may be crucial to obtain a good random sample.
+            In order to choose the cells to modify, BART will scan the result of a viogen query
+            using the following sampling algorithm:
+            1) First, a number of tuples are skipped. This is a random number choosed btw 
+                0 and (offsetFactor * tableSize)
+            2) Then BART will scan the result and will pickup tuples 
+            with a probability p = probabilityFactor.
+            
+            BART uses three kinds of queries
+            - Symmetric queries: for symmetric viogen queries (see paper)
+            - Inequality queries: for viogen queries without equalities (i.e. inequalities only)
+            - Standard queries: for all other viogen queries
+        -->
+    <vioGenQueriesConfiguration>
+      <!-- STANDARD QUERIES -->
+      <probabilityFactorForStandardQueries>0.25</probabilityFactorForStandardQueries>
+      <offsetFactorForStandardQueries>0.05</offsetFactorForStandardQueries>
+      <!-- SYMMETRIC QUERIES -->
+      <probabilityFactorForSymmetricQueries>0.25</probabilityFactorForSymmetricQueries>
+      <offsetFactorForSymmetricQueries>0.05</offsetFactorForSymmetricQueries>
+      <!-- INEQUALITY QUERIES -->
+      <probabilityFactorForInequalityQueries>0.05</probabilityFactorForInequalityQueries>
+      <offsetFactorForInequalityQueries>0.05</offsetFactorForInequalityQueries>
+      <windowSizeFactorForInequalityQueries>1.5</windowSizeFactorForInequalityQueries>
+    </vioGenQueriesConfiguration>
+    <randomErrors>
+      <tables>
+        <table name="salaries">
+          <percentage>20</percentage>
+          <!-- Percentage is wrt attributes to dirty in the table: 
+		salaries(Id: $id1,EmployeeName: $em1, JobTitle: $j1, BasePay: $b1, OvertimePay: $o1 ,OtherPay: $p1 ,Benefits: $bf1 ,TotalPay: $t1 , TotalPayBenefits: $tp1 ,Year: $y1 ,Notes: $n1, Agency: $a1, Status: $s1) -->
+          <attributes>
+            <attribute>EmployeeName</attribute>
+            <attribute>JobTitle</attribute>
+            <attribute>Agency</attribute>
+            <attribute>TotalPay</attribute>
+          </attributes>
+        </table>
+      </tables>
+    </randomErrors>
+    <dirtyStrategies>
+      <!--
+strategies: 
+TypoAppendString
+TypoAddString
+TypoRandom
+TypoRemoveString
+TypoSwitchValue
+TypoActiveDomain -->
+      <defaultStrategy>
+        <strategy>TypoRandom</strategy>
+      </defaultStrategy>
+      <attributeStrategy>
+        <attributes>
+          <attribute table="salaries" name="EmployeeName">
+            <strategy>TypoAppendString</strategy>
+          </attribute>
+          <attribute table="salaries" name="JobTitle">
+            <strategy>TypoActiveDomain</strategy>
+          </attribute>
+        </attributes>
+      </attributeStrategy>
+    </dirtyStrategies>
+    <outlierErrors>
+      <tables>
+        <table name="salaries">
+          <attributes>
+            <attribute percentage="10" detectable="true">TotalPay</attribute>
+          </attributes>
+        </table>
+      </tables>
+    </outlierErrors>
+  </configuration>
+</task>
+
