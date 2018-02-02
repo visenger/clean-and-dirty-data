@@ -1,0 +1,134 @@
+{
+    "source" : {
+        "type" : "csv",
+        "file" : ["/Users/visenger/research/datasets/clean-and-dirty-data/FLIGHTS/dirty-data-for-nadeef/flights_dirty.csv"]
+    },
+    "rule" : [
+                  {
+			"name" : "FLGHTFD1",
+            "type" : "fd",
+            "value" :  [" Flight|ActualDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD2",
+            "type" : "fd",
+            "value" :  [" Flight|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD3",
+            "type" : "fd",
+            "value" :  [" Flight|ArrivalGate "] 
+        },
+        {
+			"name" : "FLGHTFD4",
+            "type" : "fd",
+            "value" :  [" Flight|ScheduledArrival "] 
+        },
+        {
+			"name" : "FLGHTFD5",
+            "type" : "fd",
+            "value" :  [" Flight|ActualArrival "] 
+        },
+        {
+			"name" : "FLGHTFD6",
+            "type" : "fd",
+            "value" :  [" Flight|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD7",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ActualDeparture,ScheduledArrival|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD8",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ActualDeparture,ScheduledArrival|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD9",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ActualDeparture,ScheduledArrival|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD10",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,ScheduledArrival,ScheduledDeparture|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD11",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,ScheduledArrival,ScheduledDeparture|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD12",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,DepartureGate,ScheduledArrival|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD13",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,DepartureGate,ScheduledArrival|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD14",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,ArrivalGate,ScheduledArrival|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD15",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,ArrivalGate,ScheduledArrival|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD16",
+            "type" : "fd",
+            "value" :  [" ActualDeparture,Flight,ScheduledArrival|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD17",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ScheduledArrival,ScheduledDeparture|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD18",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ScheduledArrival,ScheduledDeparture|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD19",
+            "type" : "fd",
+            "value" :  [" ActualArrival,DepartureGate,ScheduledArrival|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD20",
+            "type" : "fd",
+            "value" :  [" ActualArrival,DepartureGate,ScheduledArrival|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD21",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ArrivalGate,ScheduledArrival|ScheduledDeparture "] 
+        },
+        {
+			"name" : "FLGHTFD22",
+            "type" : "fd",
+            "value" :  [" ActualArrival,ArrivalGate,ScheduledArrival|Flight "] 
+        },
+        {
+			"name" : "FLGHTFD23",
+            "type" : "fd",
+            "value" :  [" ActualArrival,Flight,ScheduledArrival|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD24",
+            "type" : "fd",
+            "value" :  [" ArrivalGate,ScheduledArrival|DepartureGate "] 
+        },
+        {
+			"name" : "FLGHTFD25",
+            "type" : "fd",
+            "value" :  [" Flight,ScheduledArrival|ScheduledDeparture "] 
+        }
+ ]
+}
+       

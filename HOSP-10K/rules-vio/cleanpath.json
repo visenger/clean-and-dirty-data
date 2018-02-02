@@ -1,0 +1,39 @@
+{
+    "source" : {
+        "type" : "csv",
+        "file" : ["/Users/visenger/research/datasets/clean-and-dirty-data/HOSP-10K/dirty/dirty_hosp_10k_with_rowid.csv"]
+    },
+    "rule" : [
+                  {
+			"name" : "HOSPFD1",
+            "type" : "fd",
+            "value" :  ["  zip | city "] 
+        },
+        {
+			"name" : "HOSPFD2",
+            "type" : "fd",
+            "value" :  ["  zip | state "] 
+        },
+        {
+			"name" : "HOSPFD3",
+            "type" : "fd",
+            "value" :  ["  zip, address | phone "] 
+        },
+        {
+			"name" : "HOSPFD4",
+            "type" : "fd",
+            "value" :  ["  city, address | phone "] 
+        },
+        {
+			"name" : "HOSPFD5",
+            "type" : "fd",
+            "value" :  ["  state, address | phone "] 
+        },
+        {
+			"name" : "HOSPFD6",
+            "type" : "fd",
+            "value" :  ["  prno, mc | stateavg "] 
+        }
+ ]
+}
+       

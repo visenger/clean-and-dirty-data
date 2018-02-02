@@ -1,0 +1,6 @@
+ zip -> city
+ zip -> state
+ zip, address -> phone
+ city, address -> phone
+ state, address -> phone
+ prno, mc -> stateavg

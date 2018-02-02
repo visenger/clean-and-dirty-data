@@ -1,0 +1,17 @@
+splitrows col: column1 on: '\r\n' quote: '\"'
+split col: column1 on: ',' limit: 13 quote: '\"'
+replace col: * with: '' on: '\"' global: true
+header
+derive value: ismissing([benefits]) as: 'vio_benefits'
+derive value: ismissing([status]) as: 'vio_status'
+derive value: matches([employeename], /[a-z]/) as: 'vio_employeename'
+derive value: matches([jobtitle], /[a-z1-2]/) as: 'vio_jobtitle'
+drop col: id
+drop col: overtimepay
+drop col: otherpay
+drop col: totalpaybenefits
+drop col: year
+drop col: notes
+drop col: agency
+derive value: totalpay < 0 as: 'vio_totalpay'
+derive value: basepay < 0 as: 'vio_basepay'

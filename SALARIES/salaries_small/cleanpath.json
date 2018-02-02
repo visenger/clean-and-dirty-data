@@ -1,0 +1,24 @@
+{
+    "source" : {
+        "type" : "csv",
+        "file" : ["/Users/visenger/research/datasets/clean-and-dirty-data/SALARIES/salaries_small/dirty/dirty_salaries_with_id_nadeef_version.csv"]
+    },
+    "rule" : [
+                  {
+			"name" : "SLRFD1",
+            "type" : "fd",
+            "value" :  [" basepay, benefits, employeename, jobtitle | totalpay "] 
+        },
+        {
+			"name" : "SLRFD2",
+            "type" : "fd",
+            "value" :  [" basepay, benefits, employeename, overtimepay | totalpay "] 
+        },
+        {
+			"name" : "SLRFD3",
+            "type" : "fd",
+            "value" :  [" basepay, otherpay, overtimepay | totalpay "] 
+        }
+ ]
+}
+       

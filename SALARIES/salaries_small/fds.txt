@@ -1,0 +1,4 @@
+basepay, benefits, employeename, jobtitle -> totalpay
+basepay, benefits, employeename, overtimepay -> totalpay
+basepay, otherpay, overtimepay -> totalpay
+

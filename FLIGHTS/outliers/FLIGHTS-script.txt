@@ -1,0 +1,4 @@
+# FLIGHTS:
+./dboost/dboost-stdin.py -F , -d string_case --statistical 1 --histogram 0.8 0.2 ~/research/datasets/clean-and-dirty-data/FLIGHTS/dirty-data/flights-dirty.csv > ~/research/datasets/clean-and-dirty-data/FLIGHTS/outliers/hist/dtct_flights-dirty.txt
+
+./dboost/dboost-stdin.py -F , -d string_case --statistical 1 --gaussian 3 ~/research/datasets/clean-and-dirty-data/FLIGHTS/dirty-data/flights-dirty.csv > ~/research/datasets/clean-and-dirty-data/FLIGHTS/outliers/gauss/dtct_flights-dirty.txt
